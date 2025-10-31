@@ -8,19 +8,23 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ rows, cols, className = "" }) => {
-  const totalSquares = rows * cols;
-
   return (
     <div
-      className={`grid h-full w-full gap-1 ${className}`}
+      className={`grid h-full w-full ${className}`}
       style={{
         gridTemplateColumns: `repeat(${cols}, 1fr)`,
         gridTemplateRows: `repeat(${rows}, 1fr)`,
       }}
     >
-      {Array.from({ length: totalSquares }, (_, index) => (
-        <CalendarSquare key={index}></CalendarSquare>
-      ))}
+      {Array.from({ length: rows }, (_, rowIndex) =>
+        Array.from({ length: cols }, (_, colIndex) => (
+          <CalendarSquare
+            key={`${rowIndex}-${colIndex}`}
+            row={rowIndex + 1}
+            col={colIndex + 1}
+          />
+        )),
+      )}
     </div>
   );
 };
