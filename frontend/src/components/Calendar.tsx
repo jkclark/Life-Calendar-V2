@@ -5,14 +5,20 @@ interface CalendarProps {
   rows: number;
   cols: number;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ rows, cols, className = "" }) => {
+const Calendar: React.FC<CalendarProps> = ({
+  rows,
+  cols,
+  className = "",
+  style,
+}) => {
   // Helper function to determine if a number should be shown on axis
   const shouldShowNumber = (num: number) => num === 1 || num % 10 === 0;
 
   return (
-    <div className={`h-full w-full ${className}`}>
+    <div className={`w-full ${className}`} style={style}>
       {/* Overall grid: top-left empty, top axis, left axis, main calendar */}
       <div
         className="grid h-full w-full"
