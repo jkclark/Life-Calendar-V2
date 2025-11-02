@@ -12,13 +12,13 @@ const Calendar: React.FC<CalendarProps> = ({ rows, cols, className = "" }) => {
   const shouldShowNumber = (num: number) => num === 1 || num % 10 === 0;
 
   return (
-    <div className={`h-full w-full overflow-auto ${className}`}>
+    <div className={`h-full w-full ${className}`}>
       {/* Overall grid: top-left empty, top axis, left axis, main calendar */}
       <div
-        className="grid"
+        className="grid h-full w-full"
         style={{
-          gridTemplateColumns: `2rem repeat(${cols}, 1fr)`,
-          gridTemplateRows: `1.5rem repeat(${rows}, 1fr)`,
+          gridTemplateColumns: `1rem repeat(${cols}, minmax(0, 1fr))`,
+          gridTemplateRows: `1.5rem repeat(${rows}, minmax(0, 1fr))`,
         }}
       >
         {/* Empty top-left corner */}
