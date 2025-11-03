@@ -9,10 +9,12 @@ function App() {
         <Calendar
           rows={90}
           cols={52}
-          className="mx-auto w-full max-w-[80vw]"
+          className="mx-auto"
           style={{
-            height: "calc(100vh - 5rem)",
+            height: "min(calc(100vh - 5rem), calc(80vw * 3 / 2))",
+            width: "min(80vw, calc((100vh - 5rem) * 2 / 3))",
             maxHeight: "calc(100vh - 5rem)",
+            maxWidth: "80vw",
           }}
         ></Calendar>
       </div>
