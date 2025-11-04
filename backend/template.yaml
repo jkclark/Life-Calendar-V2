@@ -14,6 +14,20 @@ Resources:
       FunctionName: CreateNewCalendar
       CodeUri: ./
       Handler: src/createNewCalendar.handler
+      Environment:
+        Variables:
+          CALENDAR_STORE_TYPE: s3
+          S3_BUCKET_NAME: !Ref CalendarDataBucket
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref CalendarDataBucket
+        - S3WritePolicy:
+            BucketName: !Ref CalendarDataBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:DeleteObject
+              Resource: !Sub "arn:aws:s3:::${CalendarDataBucket}/*"
       Events:
         CreateCalendarApi:
           Type: HttpApi
@@ -29,6 +43,22 @@ Resources:
         Sourcemap: true
         EntryPoints:
           - src/createNewCalendar.ts
+
+  CalendarDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: life-calendar-calendars
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
 
   MyHttpApi:
     Type: AWS::Serverless::HttpApi
@@ -56,3 +86,6 @@ Outputs:
   HttpApiId:
     Description: "HTTP API Gateway ID"
     Value: !Ref MyHttpApi
+  CalendarDataBucket:
+    Description: "S3 Bucket for storing calendar data"
+    Value: !Ref CalendarDataBucket
