@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "@life-calendar/backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Life Calendar V2 Backend API",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -16,6 +16,9 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "dependencies": {
+    "@life-calendar/common": "file:../common"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.157",
     "@types/node": "^24.10.0",

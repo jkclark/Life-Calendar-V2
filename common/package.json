@@ -1,0 +1,17 @@
+{
+    "name": "@life-calendar/common",
+    "version": "1.0.0",
+    "description": "Shared types and utilities for Life Calendar",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.3"
+    },
+    "files": [
+        "dist/"
+    ]
+}
