@@ -73,6 +73,41 @@ Resources:
         EntryPoints:
           - src/readCalendar.ts
 
+  DeleteCalendarFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteCalendar
+      CodeUri: ./
+      Handler: src/deleteCalendar.handler
+      Environment:
+        Variables:
+          CALENDAR_STORE_TYPE: s3
+          S3_BUCKET_NAME: !Ref CalendarDataBucket
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref CalendarDataBucket
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:DeleteObject
+              Resource: !Sub "arn:aws:s3:::${CalendarDataBucket}/*"
+      Events:
+        DeleteCalendarApi:
+          Type: HttpApi
+          Properties:
+            Path: /calendar/{id}
+            Method: delete
+            ApiId: !Ref MyHttpApi
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2022"
+        Sourcemap: true
+        EntryPoints:
+          - src/deleteCalendar.ts
+
   CalendarDataBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -86,8 +121,6 @@ Resources:
         BlockPublicPolicy: true
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
-      VersioningConfiguration:
-        Status: Enabled
 
   MyHttpApi:
     Type: AWS::Serverless::HttpApi
@@ -104,6 +137,7 @@ Resources:
         AllowMethods:
           - GET
           - POST
+          - DELETE
           - OPTIONS
 
 Outputs:
@@ -116,6 +150,9 @@ Outputs:
   ReadCalendarFunction:
     Description: "ReadCalendar Lambda Function ARN"
     Value: !GetAtt ReadCalendarFunction.Arn
+  DeleteCalendarFunction:
+    Description: "DeleteCalendar Lambda Function ARN"
+    Value: !GetAtt DeleteCalendarFunction.Arn
   HttpApiId:
     Description: "HTTP API Gateway ID"
     Value: !Ref MyHttpApi
