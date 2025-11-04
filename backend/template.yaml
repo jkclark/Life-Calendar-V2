@@ -13,7 +13,7 @@ Resources:
     Properties:
       FunctionName: CreateNewCalendar
       CodeUri: ./
-      Handler: createNewCalendar.handler
+      Handler: src/createNewCalendar.handler
       Events:
         CreateCalendarApi:
           Type: HttpApi
@@ -28,7 +28,7 @@ Resources:
         Target: "es2022"
         Sourcemap: true
         EntryPoints:
-          - createNewCalendar.ts
+          - src/createNewCalendar.ts
 
   MyHttpApi:
     Type: AWS::Serverless::HttpApi
