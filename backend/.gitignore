@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# AWS SAM
+.aws-sam/
+
+# TypeScript build output
+dist/
+*.js
+*.js.map
+
+# Environment variables
+.env*
+
+# Logs
+*.log
+
+# AWS credentials (if accidentally created here)
+.aws/
+
+# Build artifacts
+*.zip

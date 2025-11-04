@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Life Calendar V2 Backend
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: nodejs20.x
+
+Resources:
+  CreateNewCalendarFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateNewCalendar
+      CodeUri: ./
+      Handler: createNewCalendar.handler
+      Events:
+        CreateCalendarApi:
+          Type: HttpApi
+          Properties:
+            Path: /calendar
+            Method: post
+            ApiId: !Ref MyHttpApi
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2022"
+        Sourcemap: true
+        EntryPoints:
+          - createNewCalendar.ts
+
+  MyHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowHeaders:
+          - Content-Type
+          - X-Amz-Date
+          - Authorization
+          - X-Api-Key
+          - X-Amz-Security-Token
+        AllowMethods:
+          - POST
+          - OPTIONS
+
+Outputs:
+  CreateCalendarApi:
+    Description: "HTTP API endpoint URL for CreateNewCalendar function"
+    Value: !Sub "https://${MyHttpApi}.execute-api.${AWS::Region}.amazonaws.com/calendar"
+  CreateNewCalendarFunction:
+    Description: "CreateNewCalendar Lambda Function ARN"
+    Value: !GetAtt CreateNewCalendarFunction.Arn
+  HttpApiId:
+    Description: "HTTP API Gateway ID"
+    Value: !Ref MyHttpApi

@@ -1,0 +1,13 @@
+# SAM configuration file
+# This file can be used to store default parameters for SAM CLI commands
+
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "life-calendar-backend"
+s3_prefix = "life-calendar-backend"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+profile = "life-calendar"
+resolve_s3 = true
