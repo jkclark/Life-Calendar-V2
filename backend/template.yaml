@@ -44,6 +44,35 @@ Resources:
         EntryPoints:
           - src/createNewCalendar.ts
 
+  ReadCalendarFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadCalendar
+      CodeUri: ./
+      Handler: src/readCalendar.handler
+      Environment:
+        Variables:
+          CALENDAR_STORE_TYPE: s3
+          S3_BUCKET_NAME: !Ref CalendarDataBucket
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref CalendarDataBucket
+      Events:
+        ReadCalendarApi:
+          Type: HttpApi
+          Properties:
+            Path: /calendar/{id}
+            Method: get
+            ApiId: !Ref MyHttpApi
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2022"
+        Sourcemap: true
+        EntryPoints:
+          - src/readCalendar.ts
+
   CalendarDataBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -73,6 +102,7 @@ Resources:
           - X-Api-Key
           - X-Amz-Security-Token
         AllowMethods:
+          - GET
           - POST
           - OPTIONS
 
@@ -83,6 +113,9 @@ Outputs:
   CreateNewCalendarFunction:
     Description: "CreateNewCalendar Lambda Function ARN"
     Value: !GetAtt CreateNewCalendarFunction.Arn
+  ReadCalendarFunction:
+    Description: "ReadCalendar Lambda Function ARN"
+    Value: !GetAtt ReadCalendarFunction.Arn
   HttpApiId:
     Description: "HTTP API Gateway ID"
     Value: !Ref MyHttpApi

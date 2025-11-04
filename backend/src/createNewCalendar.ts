@@ -1,17 +1,8 @@
-import type { Calendar } from "@life-calendar/common";
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda";
-import { CalendarStore, S3CalendarStore } from "./calendar_stores";
 
-// Factory function to create the appropriate store based on environment
-function createCalendarStore(): CalendarStore {
-  const bucketName = process.env.S3_BUCKET_NAME;
-
-  if (!bucketName) {
-    throw new Error("S3_BUCKET_NAME environment variable is not set");
-  }
-
-  return new S3CalendarStore(bucketName);
-}
+import type { Calendar } from "@life-calendar/common";
+import { CalendarStore } from "./calendar_stores";
+import { getCalendarStore } from "./utils";
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -21,7 +12,7 @@ export const handler = async (
   console.log("Context:", JSON.stringify(context, null, 2));
 
   try {
-    const store = createCalendarStore();
+    const store: CalendarStore = getCalendarStore();
 
     // Parse request body if present
     const requestBody = event.body ? JSON.parse(event.body) : {};
