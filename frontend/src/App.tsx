@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="flex h-screen flex-col">
       <Navbar />
-      <div className="flex-1 px-4">
+      <div className="flex flex-1 items-center justify-center px-4">
         <NewOrImport />
         {false && (
           <Calendar
