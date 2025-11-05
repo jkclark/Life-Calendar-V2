@@ -1,14 +1,13 @@
 import Calendar from "./components/Calendar";
+import CreateOrImport from "./components/CreateOrImport";
 import Navbar from "./components/Navbar";
-import NewOrImport from "./components/NewOrImport";
-// import type { Calendar as CalendarType } from "@life-calendar/common";
 
 function App() {
   return (
     <div className="flex h-screen flex-col">
       <Navbar />
       <div className="flex flex-1 items-center justify-center px-4">
-        <NewOrImport />
+        <CreateOrImport />
         {false && (
           <Calendar
             rows={90}

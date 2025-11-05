@@ -1,12 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import type React from "react";
 import { useState } from "react";
-import CreateCalendarModal from "./CreateCalendarModal";
+import CreateCalendar from "./CreateCalendar";
 import ImportCalendarModal from "./ImportCalendarModal";
 
 type ViewState = "selection" | "create" | "import";
 
-const NewOrImport: React.FC = () => {
+const CreateOrImport: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>("selection");
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
 
@@ -106,7 +106,7 @@ const NewOrImport: React.FC = () => {
               transition={pageTransition}
               className="w-full"
             >
-              <CreateCalendarModal />
+              <CreateCalendar />
             </motion.div>
           )}
           {currentView === "import" && (
@@ -160,4 +160,4 @@ interface SelectViewProps {
   onImportClick: () => void;
 }
 
-export default NewOrImport;
+export default CreateOrImport;

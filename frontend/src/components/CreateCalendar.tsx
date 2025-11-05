@@ -1,7 +1,7 @@
 import type React from "react";
 
-const CreateCalendarModal: React.FC = () => {
+const CreateCalendar: React.FC = () => {
   return <div className="text-center">Let's create a calendar!</div>;
 };
 
-export default CreateCalendarModal;
+export default CreateCalendar;
