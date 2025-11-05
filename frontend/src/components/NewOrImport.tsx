@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import type React from "react";
 import { useState } from "react";
 import CreateCalendarModal from "./CreateCalendarModal";
@@ -7,50 +8,124 @@ type ViewState = "selection" | "create" | "import";
 
 const NewOrImport: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>("selection");
+  const [direction, setDirection] = useState<"forward" | "backward">("forward");
+
+  // Animation variants for selection view
+  const getSelectionVariants = (isGoingForward: boolean) => ({
+    initial: {
+      opacity: 0,
+      x: isGoingForward ? -100 : -100, // Always enter from left when returning to selection
+      scale: 0.95,
+    },
+    in: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+    },
+    out: {
+      opacity: 0,
+      x: isGoingForward ? -100 : -100, // Exit left when going forward to modals
+      scale: 1,
+    },
+  });
+
+  // Animation variants for modal views (create/import)
+  const getModalVariants = (isGoingForward: boolean) => ({
+    initial: {
+      opacity: 0,
+      x: isGoingForward ? 100 : 100, // Always enter from right when going to modals
+      scale: 0.95,
+    },
+    in: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+    },
+    out: {
+      opacity: 0,
+      x: isGoingForward ? 100 : 100, // Exit right when going back to selection
+      scale: 1,
+    },
+  });
+
+  const pageTransition = {
+    type: "tween" as const,
+    ease: "anticipate" as const,
+    duration: 0.4,
+  };
 
   const handleNewClick = () => {
+    setDirection("forward");
     setCurrentView("create");
   };
 
   const handleImportClick = () => {
+    setDirection("forward");
     setCurrentView("import");
   };
 
   const handleBackClick = () => {
+    setDirection("backward");
     setCurrentView("selection");
   };
 
-  let elementToShow = null;
-
-  if (currentView === "selection") {
-    elementToShow = (
-      <SelectView
-        onNewClick={handleNewClick}
-        onImportClick={handleImportClick}
-      />
-    );
-  } else if (currentView === "create") {
-    elementToShow = <CreateCalendarModal />;
-  } else if (currentView === "import") {
-    elementToShow = <ImportCalendarModal />;
-  }
-
-  if (elementToShow) {
-    return (
-      <div className="flex aspect-square w-[80%] max-w-[800px] flex-col items-center justify-center">
-        <div
-          className={`items-left justify-left flex w-full ${currentView === "selection" ? "invisible" : ""}`}
-        >
-          <button className="btn" onClick={handleBackClick}>
-            Back
-          </button>
-        </div>
-        <div className="flex w-full flex-1 items-center justify-center">
-          {elementToShow}
-        </div>
+  return (
+    <div className="flex aspect-square w-[80%] max-w-[800px] flex-col items-center justify-center">
+      <div
+        className={`items-left justify-left flex w-full ${currentView === "selection" ? "invisible" : ""}`}
+      >
+        <button className="btn" onClick={handleBackClick}>
+          Back
+        </button>
       </div>
-    );
-  }
+      <div className="flex w-full flex-1 items-center justify-center">
+        <AnimatePresence mode="wait">
+          {currentView === "selection" && (
+            <motion.div
+              key="selection"
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={getSelectionVariants(direction === "forward")}
+              transition={pageTransition}
+              className="w-full"
+            >
+              <SelectView
+                onNewClick={handleNewClick}
+                onImportClick={handleImportClick}
+              />
+            </motion.div>
+          )}
+          {currentView === "create" && (
+            <motion.div
+              key="create"
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={getModalVariants(direction === "forward")}
+              transition={pageTransition}
+              className="w-full"
+            >
+              <CreateCalendarModal />
+            </motion.div>
+          )}
+          {currentView === "import" && (
+            <motion.div
+              key="import"
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={getModalVariants(direction === "forward")}
+              transition={pageTransition}
+              className="w-full"
+            >
+              <ImportCalendarModal />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
 };
 
 const SelectView: React.FC<SelectViewProps> = ({
