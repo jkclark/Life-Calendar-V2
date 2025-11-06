@@ -12,7 +12,7 @@ export const createCalendar = async (
     },
     body: JSON.stringify(calendarData),
   });
-  return response.json();
+  return (await response.json()).calendar;
 };
 
 export const getCalendar = async (id: string): Promise<Calendar> => {

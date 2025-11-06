@@ -1,3 +1,4 @@
+import type { Calendar } from "@life-calendar/common";
 import { AnimatePresence, motion } from "framer-motion";
 import type React from "react";
 import { useState } from "react";
@@ -6,7 +7,13 @@ import ImportCalendarModal from "./ImportCalendarModal";
 
 type ViewState = "selection" | "create" | "import";
 
-const CreateOrImport: React.FC = () => {
+interface CreateOrImportProps {
+  setCurrentCalendar: (calendar: Calendar | null) => void;
+}
+
+const CreateOrImport: React.FC<CreateOrImportProps> = ({
+  setCurrentCalendar,
+}) => {
   const [currentView, setCurrentView] = useState<ViewState>("selection");
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
 
@@ -106,7 +113,7 @@ const CreateOrImport: React.FC = () => {
               transition={pageTransition}
               className="w-full"
             >
-              <CreateCalendar />
+              <CreateCalendar setCurrentCalendar={setCurrentCalendar} />
             </motion.div>
           )}
           {currentView === "import" && (
