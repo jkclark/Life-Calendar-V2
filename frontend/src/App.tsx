@@ -10,7 +10,7 @@ function App() {
 
   return (
     <div className="flex h-screen flex-col">
-      <Navbar />
+      <Navbar currentCalendar={currentCalendar} />
       <div className="flex flex-1 items-center justify-center px-4">
         {!currentCalendar && (
           <CreateOrImport setCurrentCalendar={setCurrentCalendar} />

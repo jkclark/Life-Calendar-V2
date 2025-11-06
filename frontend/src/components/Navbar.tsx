@@ -1,10 +1,17 @@
+import type { Calendar } from "@life-calendar/common";
 import React from "react";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  currentCalendar: Calendar | null;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ currentCalendar }) => {
   return (
     <div className="navbar bg-base-100 pb-0 select-none">
       <div className="navbar-start">
-        <div className="px-4 py-3 text-xl font-semibold">Life Calendar</div>
+        <div className="px-4 py-3 text-xl font-semibold">
+          {currentCalendar ? currentCalendar.name : "Life Calendar"}
+        </div>
       </div>
     </div>
   );
