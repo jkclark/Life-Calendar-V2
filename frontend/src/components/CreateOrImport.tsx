@@ -16,25 +16,53 @@ const CreateOrImport: React.FC<CreateOrImportProps> = ({
 }) => {
   const [currentView, setCurrentView] = useState<ViewState>("selection");
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
+  const [hasNavigatedAway, setHasNavigatedAway] = useState(false);
 
   // Animation variants for selection view
-  const getSelectionVariants = (isGoingForward: boolean) => ({
-    initial: {
-      opacity: 0,
-      x: isGoingForward ? -100 : -100, // Always enter from left when returning to selection
-      scale: 0.95,
-    },
-    in: {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-    },
-    out: {
-      opacity: 0,
-      x: isGoingForward ? -100 : -100, // Exit left when going forward to modals
-      scale: 1,
-    },
-  });
+  const getSelectionVariants = (
+    isGoingForward: boolean,
+    isFirstRender: boolean,
+  ) => {
+    if (isFirstRender) {
+      // No animation on first render
+      return {
+        initial: {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+        },
+        in: {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+        },
+        out: {
+          opacity: 0,
+          x: isGoingForward ? -100 : -100, // Exit left when going forward to modals
+          scale: 1,
+        },
+      };
+    }
+
+    // Normal animation when returning from other views
+    return {
+      initial: {
+        opacity: 0,
+        x: isGoingForward ? -100 : -100, // Always enter from left when returning to selection
+        scale: 0.95,
+      },
+      in: {
+        opacity: 1,
+        x: 0,
+        scale: 1,
+      },
+      out: {
+        opacity: 0,
+        x: isGoingForward ? -100 : -100, // Exit left when going forward to modals
+        scale: 1,
+      },
+    };
+  };
 
   // Animation variants for modal views (create/import)
   const getModalVariants = (isGoingForward: boolean) => ({
@@ -63,11 +91,13 @@ const CreateOrImport: React.FC<CreateOrImportProps> = ({
 
   const handleNewClick = () => {
     setDirection("forward");
+    setHasNavigatedAway(true);
     setCurrentView("create");
   };
 
   const handleImportClick = () => {
     setDirection("forward");
+    setHasNavigatedAway(true);
     setCurrentView("import");
   };
 
@@ -93,7 +123,10 @@ const CreateOrImport: React.FC<CreateOrImportProps> = ({
               initial="initial"
               animate="in"
               exit="out"
-              variants={getSelectionVariants(direction === "forward")}
+              variants={getSelectionVariants(
+                direction === "forward",
+                !hasNavigatedAway,
+              )}
               transition={pageTransition}
               className="w-full"
             >
