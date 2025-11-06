@@ -1,7 +1,7 @@
 import type { Calendar } from "@life-calendar/common";
 import type React from "react";
 import { useState } from "react";
-import { createCalendar } from "../calendar";
+import { createCalendar } from "../calendarAPI";
 
 interface CreateCalendarProps {
   setCurrentCalendar: (calendar: Calendar | null) => void;
