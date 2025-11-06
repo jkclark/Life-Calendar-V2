@@ -24,16 +24,14 @@ const CreateOrImport: React.FC<CreateOrImportProps> = ({
     isFirstRender: boolean,
   ) => {
     if (isFirstRender) {
-      // No animation on first render
+      // Enter animation on first render - fade in with gentle scale
       return {
         initial: {
-          opacity: 1,
-          x: 0,
-          scale: 1,
+          opacity: 0,
+          scale: 0.9,
         },
         in: {
           opacity: 1,
-          x: 0,
           scale: 1,
         },
         out: {
