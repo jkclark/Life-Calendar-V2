@@ -106,13 +106,6 @@ const CreateOrImport: React.FC<CreateOrImportProps> = ({
 
   return (
     <div className="flex aspect-square w-[80%] max-w-[800px] flex-col items-center justify-center">
-      <div
-        className={`items-left justify-left flex w-full ${currentView === "selection" ? "invisible" : ""}`}
-      >
-        <button className="btn" onClick={handleBackClick}>
-          Back
-        </button>
-      </div>
       <div className="flex w-full flex-1 items-center justify-center">
         <AnimatePresence mode="wait">
           {currentView === "selection" && (
@@ -144,7 +137,10 @@ const CreateOrImport: React.FC<CreateOrImportProps> = ({
               transition={pageTransition}
               className="w-full"
             >
-              <CreateCalendar setCurrentCalendar={setCurrentCalendar} />
+              <CreateCalendar
+                setCurrentCalendar={setCurrentCalendar}
+                onBackClick={handleBackClick}
+              />
             </motion.div>
           )}
           {currentView === "import" && (

@@ -5,10 +5,12 @@ import { createCalendar } from "../calendar";
 
 interface CreateCalendarProps {
   setCurrentCalendar: (calendar: Calendar | null) => void;
+  onBackClick: () => void;
 }
 
 const CreateCalendar: React.FC<CreateCalendarProps> = ({
   setCurrentCalendar,
+  onBackClick,
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -59,8 +61,26 @@ const CreateCalendar: React.FC<CreateCalendarProps> = ({
   };
 
   return (
-    <div className="mx-auto flex h-full max-w-md flex-col space-y-4 p-6">
-      <h2 className="text-2xl font-bold">New Calendar</h2>
+    <div className="mx-auto flex h-full max-w-lg flex-col space-y-4 p-6">
+      <div className="flex justify-between">
+        <h2 className="text-2xl font-bold">New Calendar</h2>
+        <button className="btn btn-ghost" onClick={onBackClick}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+            />
+          </svg>
+        </button>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Calendar Name Input */}
