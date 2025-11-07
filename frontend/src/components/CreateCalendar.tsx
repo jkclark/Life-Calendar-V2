@@ -119,7 +119,7 @@ const CreateCalendar: React.FC<CreateCalendarProps> = ({
           disabled={isLoading || !formData.name || !formData.startDate}
           className="btn btn-primary w-full"
         >
-          {isLoading ? "Loading..." : "Create Calendar"}
+          {isLoading ? "Creating calendar..." : "Create Calendar"}
         </button>
       </form>
 
