@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { getDateRangeForRowCol } from "../calendarUtils";
 import CalendarSquare from "./CalendarSquare";
 
@@ -17,6 +17,18 @@ const Calendar: React.FC<CalendarProps> = ({
   className = "",
   style,
 }) => {
+  // Memoize date ranges to avoid recalculating on every render
+  const dateRanges = useMemo(() => {
+    const ranges: { [key: string]: { startDate: Date; endDate: Date } } = {};
+    for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+      for (let colIndex = 0; colIndex < cols; colIndex++) {
+        const key = `${rowIndex}-${colIndex}`;
+        ranges[key] = getDateRangeForRowCol(rowIndex, colIndex, startDate);
+      }
+    }
+    return ranges;
+  }, [rows, cols, startDate]);
+
   // Helper function to determine if a number should be shown on axis
   const shouldShowNumber = (num: number) =>
     num + 1 === 1 || (num + 1) % 10 === 0;
@@ -59,17 +71,9 @@ const Calendar: React.FC<CalendarProps> = ({
             </div>,
             // Calendar squares for this row
             ...Array.from({ length: cols }, (_, colIndex) => {
-              const dateRange = getDateRangeForRowCol(
-                rowIndex,
-                colIndex,
-                startDate,
-              );
-              return (
-                <CalendarSquare
-                  key={`${rowIndex}-${colIndex}`}
-                  dateRange={dateRange}
-                />
-              );
+              const key = `${rowIndex}-${colIndex}`;
+              const dateRange = dateRanges[key];
+              return <CalendarSquare key={key} dateRange={dateRange} />;
             }),
           ];
         }).flat()}
