@@ -1,19 +1,26 @@
 import React from "react";
 
 interface CalendarSquareProps {
+  dateRange: { startDate: Date; endDate: Date };
   children?: React.ReactNode;
   className?: string;
-  row?: number;
-  col?: number;
 }
 
 const CalendarSquare: React.FC<CalendarSquareProps> = ({
   children,
   className = "",
-  row,
-  col,
+  dateRange,
 }) => {
-  const tooltipText = row && col ? `(${col}, ${row})` : "";
+  function formatDate(date: Date): string {
+    return date.toLocaleDateString("en-US", {
+      timeZone: "UTC",
+      month: "numeric",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+
+  const tooltipText = `${formatDate(dateRange.startDate)} - ${formatDate(dateRange.endDate)}`;
 
   return (
     <div

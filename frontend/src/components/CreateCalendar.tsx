@@ -45,7 +45,6 @@ const CreateCalendar: React.FC<CreateCalendarProps> = ({
 
       // Call API
       const newCalendar = await createCalendar(calendarData as Calendar);
-      console.log("New Calendar Created:", newCalendar);
 
       // Success
       setSuccess(newCalendar);

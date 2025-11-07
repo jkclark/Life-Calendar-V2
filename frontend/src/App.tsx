@@ -19,6 +19,7 @@ function App() {
           <CalendarComponent
             rows={90}
             cols={52}
+            startDate={currentCalendar.startDate}
             className="mx-auto"
             style={{
               height: "min(calc(100vh - 5rem), calc(80vw * 3 / 2))",

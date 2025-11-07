@@ -1,9 +1,11 @@
 import React from "react";
+import { getDateRangeForRowCol } from "../calendarUtils";
 import CalendarSquare from "./CalendarSquare";
 
 interface CalendarProps {
   rows: number;
   cols: number;
+  startDate: Date;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -11,11 +13,13 @@ interface CalendarProps {
 const Calendar: React.FC<CalendarProps> = ({
   rows,
   cols,
+  startDate,
   className = "",
   style,
 }) => {
   // Helper function to determine if a number should be shown on axis
-  const shouldShowNumber = (num: number) => num === 1 || num % 10 === 0;
+  const shouldShowNumber = (num: number) =>
+    num + 1 === 1 || (num + 1) % 10 === 0;
 
   return (
     <div className={`w-full ${className}`} style={style}>
@@ -32,7 +36,7 @@ const Calendar: React.FC<CalendarProps> = ({
 
         {/* Top axis (column numbers) */}
         {Array.from({ length: cols }, (_, colIndex) => {
-          const colNumber = colIndex + 1;
+          const colNumber = colIndex;
           return (
             <div
               key={`col-${colIndex}`}
@@ -45,23 +49,28 @@ const Calendar: React.FC<CalendarProps> = ({
 
         {/* Left axis and calendar rows */}
         {Array.from({ length: rows }, (_, rowIndex) => {
-          const rowNumber = rowIndex + 1;
           return [
             // Left axis (row number)
             <div
               key={`row-${rowIndex}`}
               className="flex items-center justify-center text-xs text-gray-600"
             >
-              {shouldShowNumber(rowNumber) ? rowNumber : ""}
+              {shouldShowNumber(rowIndex) ? rowIndex : ""}
             </div>,
             // Calendar squares for this row
-            ...Array.from({ length: cols }, (_, colIndex) => (
-              <CalendarSquare
-                key={`${rowIndex}-${colIndex}`}
-                row={rowIndex + 1}
-                col={colIndex + 1}
-              />
-            )),
+            ...Array.from({ length: cols }, (_, colIndex) => {
+              const dateRange = getDateRangeForRowCol(
+                rowIndex,
+                colIndex,
+                startDate,
+              );
+              return (
+                <CalendarSquare
+                  key={`${rowIndex}-${colIndex}`}
+                  dateRange={dateRange}
+                />
+              );
+            }),
           ];
         }).flat()}
       </div>
